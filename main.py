@@ -1,4 +1,4 @@
-import sys, youtube_dl
+import sys, youtube_dl, os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
 
@@ -20,8 +20,14 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
         self.button_download.clicked.connect(self.download)
         self.button_destination.clicked.connect(self.destination)
+
+        if not os.path.isdir('Downloads'):
+            os.mkdir('Downloads')
+        dir = os.getcwd()
+        self.downloadDir = '{}/Downloads/%(title)s-%(id)s.%(ext)s'.format(dir)
 
     def download(self):
         self.link = self.edit_link.text()
@@ -40,8 +46,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def destination(self):
         self.downloadDir = str(QFileDialog.getExistingDirectory(self, "Select Download Directory"))
-
-
+        self.downloadDir = '{}/%(title)s-%(id)s.%(ext)s'.format(self.downloadDir)
 
 
 #**************FILE FORMATS****************************FILE FORMATS*******************************FILE FORMATS*****************
